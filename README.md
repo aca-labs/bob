@@ -1,18 +1,23 @@
-# bob
+# Bob
 
-Meet Bob. He builds your local docker development environments.
+Meet Bob - the non trademark infringing construction worker. He builds your local docker development environments.
 
-## Installation
-
-TODO: Write installation instructions here
+One of more local git repositories can be watched. When you make a new commit, or switch branch the image defined by the project will be rebuilt, tagged and automatically reloaded by any containers that are using it.
 
 ## Usage
 
-TODO: Write usage instructions here
+You can run him directly:
+```
+bob /my/dev/path/my-project /my/dev/path/my-other-project
+```
 
-## Development
-
-TODO: Write development instructions here
+Or, launch as a container:
+```
+docker run -d \
+    --mount source=/var/run/docker.sock,target=/var/run/docker.sock \
+    --mount source=/my/dev/path/my-project,target=/repos/my-project
+    aca-labs/bob
+```
 
 ## Contributing
 
