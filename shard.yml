@@ -1,0 +1,17 @@
+name: bob
+version: 0.1.0
+
+authors:
+  - Kim Burgess <kim@acaprojects.com>
+
+targets:
+  bob:
+    main: src/bob.cr
+
+crystal: 0.29.0
+
+license: MIT
+
+dependencies:
+  terminimal:
+    github: aca-labs/terminimal
