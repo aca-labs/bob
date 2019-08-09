@@ -1,12 +1,12 @@
 # Bob
 
-Meet Bob - the non trademark infringing construction worker. He builds your local docker development environments.
+Meet Bob, the non-trademark-infringing-construction-worker. He builds your local docker development environments.
 
-One of more local git repositories can be watched. When you make a new commit, or switch branch the image defined by the project will be rebuilt, tagged and automatically reloaded by any containers that are using it.
+One or more local git repositories can be watched. When you make a new commit or switch branch the image defined by the project will be rebuilt, tagged and automatically reloaded by any containers that are using it.
 
 ## Usage
 
-You can run him directly:
+You can run directly:
 ```
 bob /my/dev/path/my-project /my/dev/path/my-other-project
 ```
