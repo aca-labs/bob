@@ -6,7 +6,7 @@ require "./version"
 class Bob::Cli
   VERSION = "bob #{Bob::VERSION}"
   ABOUT   = "CI/CD for local docker-based development"
-  USAGE   = "Usage: bob [OPTION]... PATH..."
+  USAGE   = "Usage: bob [OPTION]... PATH"
 
   def self.run(options = ARGV)
     new(options).run
@@ -39,14 +39,13 @@ class Bob::Cli
       Terminimal.exit_with_error "unkown option '#{flag}'", Errno::EINVAL
     end
 
-    paths = [] of String
+    path = nil
     opts.unknown_args do |args|
       Terminimal.exit_with_error "no PATH specified", Errno::EINVAL if args.empty?
-      paths = args
+      path = Path[args.first]
     end
 
     opts.parse options
 
-    puts paths
   end
 end

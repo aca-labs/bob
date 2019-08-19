@@ -8,14 +8,15 @@ One or more local git repositories can be watched. When you make a new commit or
 
 You can run directly:
 ```
-bob /my/dev/path/my-project /my/dev/path/my-other-project
+bob /my/dev/path/my-project
 ```
 
 Or, launch as a container:
 ```
 docker run -d \
     --mount source=/var/run/docker.sock,target=/var/run/docker.sock \
-    --mount source=/my/dev/path/my-project,target=/repos/my-project
+    --mount source=/my/dev/path/my-project,target=/repos/my-project \
+    --mount source=/my/dev/path/my-other-project,target=/repos/my-org/custom-name \
     aca-labs/bob
 ```
 
