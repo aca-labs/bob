@@ -57,6 +57,12 @@ class Bob::Cli
 
     opts.parse options
 
-    Builder.new(path, name).watch
+    builder = Builder.new(path, name)
+
+    builder.watch
+    at_exit { builder.unwatch }
+
+    # Let the builder do it's thing when required.
+    sleep
   end
 end
