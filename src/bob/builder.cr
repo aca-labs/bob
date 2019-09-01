@@ -23,7 +23,11 @@ class Bob::Builder
     @watcher ||= Inotify.watch "#{path}/.git/logs/HEAD" do |event|
       next unless event.type == Inotify::Event::Type::MODIFY
 
-      puts "git repo state modified"
+      entry = `tail -n 1 #{event.path}`
+      old_hash, new_hash, _ = entry.split(" ")
+      next unless new_hash != old_hash
+
+      puts "git repo state modified: #{entry}"
     end
   end
 
