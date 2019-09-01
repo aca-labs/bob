@@ -1,5 +1,6 @@
 require "docker"
 require "inotify"
+require "colorize"
 
 # Docker image builder.
 class Bob::Builder
@@ -14,7 +15,7 @@ class Bob::Builder
   # Runs a build based on the current path contents.
   def build
     puts "building #{path}"
-    puts docker.images.build path, t: name
+    docker.images.build path, t: name
   end
 
   # Start watching the path and automatically build when a new git commit is made, or when switching
@@ -23,11 +24,23 @@ class Bob::Builder
     @watcher ||= Inotify.watch "#{path}/.git/logs/HEAD" do |event|
       next unless event.type == Inotify::Event::Type::MODIFY
 
+      # FIXME: implement a file reader that tails this
       entry = `tail -n 1 #{event.path}`
+
+      # Log entries appear for all actions (e.g. re-checking our of the current branch), only
+      # progress on hash changes.
       old_hash, new_hash, _ = entry.split(" ")
       next unless new_hash != old_hash
 
-      puts "git repo state modified: #{entry}"
+      details = entry.split("\t")[1].chomp
+
+      puts "git repo change detected (#{details}), rebuilding"
+
+      begin
+        build
+      rescue e : Docker::DockerException
+        STDERR.puts "#{"error:".colorize.bright.red} #{e.message}"
+      end
     end
   end
 
