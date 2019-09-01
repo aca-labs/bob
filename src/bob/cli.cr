@@ -2,6 +2,7 @@ require "option_parser"
 require "errno"
 require "terminimal"
 require "./version"
+require "./builder"
 
 class Bob::Cli
   VERSION = "bob #{Bob::VERSION}"
@@ -42,13 +43,20 @@ class Bob::Cli
       Terminimal.exit_with_error "unkown option '#{flag}'", Errno::EINVAL
     end
 
-    path = nil
+    path = "."
     opts.unknown_args do |args|
-      Terminimal.exit_with_error "no PATH specified", Errno::EINVAL if args.empty?
-      path = Path[args.first]
+      case
+      when args.empty?
+        Terminimal.exit_with_error "no PATH specified", Errno::EINVAL
+      when !Dir.exists? args.first
+        Terminimal.exit_with_error "specified PATH (#{path}) does not exist", Errno::EINVAL
+      else
+        path = args.first
+      end
     end
 
     opts.parse options
 
+    Builder.new(path, name).watch
   end
 end

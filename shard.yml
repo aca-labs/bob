@@ -15,3 +15,5 @@ license: MIT
 dependencies:
   terminimal:
     github: aca-labs/terminimal
+  docker:
+    github: aca-labs/crystal-docker
