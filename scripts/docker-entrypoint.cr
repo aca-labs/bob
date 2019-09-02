@@ -29,7 +29,7 @@ end
 USAGE = "docker-entrypoint REPOSITORIES_PATH"
 
 def main
-  unless ARGV.size == 2 && (repositories_path = ARGV[1]?)
+  unless (repositories_path = ARGV[0]?) && ARGV.size == 1
     puts USAGE
     puts
     puts "Expected a repository path"
@@ -38,6 +38,7 @@ def main
   end
 
   repositories(repositories_path).each &->spawn_bob(Project)
+  sleep
 end
 
 main
