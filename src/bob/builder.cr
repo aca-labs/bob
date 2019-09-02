@@ -1,12 +1,13 @@
+require "colorize"
 require "docker"
 require "inotify"
-require "colorize"
 
 # Docker image builder.
 class Bob::Builder
   private getter path : String
   private getter name : String
   private getter docker : Docker::Client
+  private property watcher : Inotify::Watcher?
 
   def initialize(@path : String, image_name : String?, @docker = Docker.client)
     @name = image_name || Path.new(path).expand.basename
@@ -46,7 +47,6 @@ class Bob::Builder
 
   # Stop watching the build path.
   def unwatch : Nil
-    watcher = @watcher # local assignment required for type resolution
-    watcher.close unless watcher.nil?
+    @watcher.try &.close
   end
 end

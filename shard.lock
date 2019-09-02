@@ -1,0 +1,18 @@
+version: 1.0
+shards:
+  crystar:
+    github: naqvis/crystar
+    version: 0.1.1
+
+  docker:
+    github: aca-labs/crystal-docker
+    commit: 01eda4e8a0f401df005d9246d448218963a39df3
+
+  inotify:
+    github: aca-labs/inotify.cr
+    commit: 3e07e97842228e4294a88399630ea714b3836d3b
+
+  terminimal:
+    github: aca-labs/terminimal
+    version: 1.1.0
+
