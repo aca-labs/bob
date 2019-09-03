@@ -7,8 +7,9 @@ WORKDIR /app
 
 # Install shards for caching
 COPY shard.yml shard.yml
-
 # Build application
 RUN shards build --production
 
-ENTRYPOINT ["/app/bin/docker-entrypoint", "/repos"]
+ENV BOB_REPO_PATH="/repos"
+ENTRYPOINT ["/app/bin/docker-entrypoint"]
+CMD ["/app/bin/docker-entrypoint"]

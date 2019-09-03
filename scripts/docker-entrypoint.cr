@@ -5,20 +5,23 @@ require "../src/bob/builder"
 alias Project = NamedTuple(path: String, image_name: String)
 
 # Get directories under a path
-def repositories(path : String) : Array(Project)
-  Dir.entries(path)
-    .select(&->File.directory?(String))
-    .map(&->create_project(String))
+def repositories(base : String) : Array(Project)
+  repository_paths = Dir.entries(base).select(&->File.directory?(String))
+  # Construct projects
+  repository_paths.map { |path| create_project(base, path) }
 end
 
-def create_project(path) : Project
-  {path: path, image_name: Path[path].basename}
+# Split path into image_name and path
+def create_project(base, path) : Project
+  {path: path, image_name: path.lstrip(base).lstrip('/')}
 end
 
 # Spawn a system level Bob process for a project
 def spawn_bob(project : Project)
   Process.fork do
     builder = Bob::Builder.new(**project)
+
+    puts "Bob is watching #{project[:path]}, building #{project[:image_name]}"
     builder.watch
     at_exit { builder.unwatch }
 
@@ -26,18 +29,25 @@ def spawn_bob(project : Project)
   end
 end
 
-USAGE = "docker-entrypoint REPOSITORIES_PATH"
+USAGE = "docker-entrypoint [REPOSITORIES_PATH]"
 
 def main
-  unless (repositories_path = ARGV[0]?) && ARGV.size == 1
-    puts USAGE
-    puts
-    puts "Expected a repository path"
-    puts
-    exit 1
-  end
+  environment_repository = ENV["BOB_REPO_PATH"]?
+  argument_repository = ARGV[0]?
 
-  repositories(repositories_path).each &->spawn_bob(Project)
+  path = if argument_repository && ARGV.size == 1
+           argument_repository
+         elsif environment_repository
+           environment_repository
+         else
+           puts USAGE
+           puts
+           puts "Expected $BOB_REPO_PATH or a repository path"
+           puts
+           exit 1
+         end
+
+  repositories(path).each &->spawn_bob(Project)
   sleep
 end
 
