@@ -2,6 +2,8 @@ require "option_parser"
 
 require "../src/bob/builder"
 
+STDOUT.sync = true
+
 alias Project = NamedTuple(path: String, image_name: String)
 
 # Get directories under a path
@@ -43,15 +45,10 @@ end
 
 # Spawn a system level Bob process for a project
 def spawn_bob(project : Project)
-  Process.fork do
-    builder = Bob::Builder.new(**project)
-
-    puts "Bob is watching #{project[:path]}, building #{project[:image_name]}"
-    builder.watch
-    at_exit { builder.unwatch }
-
-    sleep
-  end
+  puts "Starting Bob watching #{project[:path]}, building #{project[:image_name]}:latest"
+  builder = Bob::Builder.new(**project)
+  spawn { builder.watch }
+  at_exit { builder.unwatch }
 end
 
 def main
