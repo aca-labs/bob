@@ -11,5 +11,4 @@ COPY shard.yml shard.yml
 RUN shards build --production
 
 ENV BOB_REPO_PATH="/repos"
-ENTRYPOINT ["/app/bin/docker-entrypoint"]
 CMD ["/app/bin/docker-entrypoint"]
