@@ -1,8 +1,9 @@
-require "option_parser"
-
-require "../src/bob/builder"
+require "./bob/builder"
 
 STDOUT.sync = true
+
+# Run bob's entrypoint :)
+entrypoint
 
 alias Project = NamedTuple(path: String, image_name: String)
 
@@ -51,7 +52,7 @@ def spawn_bob(project : Project)
   at_exit { builder.unwatch }
 end
 
-def main
+def entrypoint
   environment_repository = ENV["BOB_REPO_PATH"]?
   argument_repository = ARGV[1]?
 
@@ -70,5 +71,3 @@ def main
   repositories(path).each &->spawn_bob(Project)
   sleep
 end
-
-main

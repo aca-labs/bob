@@ -9,7 +9,7 @@ targets:
   bob:
     main: src/bob.cr
   docker-entrypoint:
-    main: scripts/docker-entrypoint.cr
+    main: src/entrypoint.cr
 
 crystal: 0.30.1
 
