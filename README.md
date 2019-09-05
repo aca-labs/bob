@@ -6,32 +6,35 @@ One or more local git repositories can be watched. When you make a new commit or
 
 ## Usage
 
-You can run directly:
+You can run Bob directly
+
 ```
 bob /my/dev/path/my-project
 ```
 
-Or, launch as a container, in this example producing the images `my-project:latest` and `my-org/custom-name:latest`:
+Or, launch as a container, in this example producing the images `my-project:latest` and `my-org/custom-name:latest`
+
 ```
 docker run -d \
     --mount source=/var/run/docker.sock,target=/var/run/docker.sock \
     --mount source=/my/dev/path/my-project,target=/repos/my-project \
     --mount source=/my/dev/path/my-other-project,target=/repos/my-org/custom-name \
-    aca-labs/bob
+    acalabs/bob
 ```
 
-Bob's entrypoint searches for repositories under `$BOB_REPO_PATH` which defaults to `/repos`:
+Bob's entrypoint searches for repositories under `$BOB_REPO_PATH` which defaults to `/repos`
+
 ```
 BOB_REPO_PATH=/repositories docker run -d \
     --mount source=/var/run/docker.sock,target=/var/run/docker.sock \
     --mount source=/my/dev/path/my-project,target=/repositories/my-project \
     --mount source=/my/dev/path/my-other-project,target=/repositories/my-org/custom-name \
-    aca-labs/bob
+    acalabs/bob
 ```
 
 ## Contributing
 
-1. Fork it (<https://github.com/aca-labs/bob/fork>)
+1. [Fork it](https://github.com/aca-labs/bob/fork)
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
