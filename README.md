@@ -11,12 +11,21 @@ You can run directly:
 bob /my/dev/path/my-project
 ```
 
-Or, launch as a container:
+Or, launch as a container, in this example producing the images `my-project:latest` and `my-org/custom-name:latest`:
 ```
 docker run -d \
     --mount source=/var/run/docker.sock,target=/var/run/docker.sock \
     --mount source=/my/dev/path/my-project,target=/repos/my-project \
     --mount source=/my/dev/path/my-other-project,target=/repos/my-org/custom-name \
+    aca-labs/bob
+```
+
+Bob's entrypoint searches for repositories under `$BOB_REPO_PATH` which defaults to `/repos`:
+```
+BOB_REPO_PATH=/repositories docker run -d \
+    --mount source=/var/run/docker.sock,target=/var/run/docker.sock \
+    --mount source=/my/dev/path/my-project,target=/repositories/my-project \
+    --mount source=/my/dev/path/my-other-project,target=/repositories/my-org/custom-name \
     aca-labs/bob
 ```
 
@@ -31,3 +40,4 @@ docker run -d \
 ## Contributors
 
 - [Kim Burgess](https://github.com/kimburgess) - creator and maintainer
+- [Caspian Baska](https://github.com/caspiano) - contributor
