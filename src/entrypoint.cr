@@ -44,7 +44,7 @@ def image_name(base : Path, absolute_path : Path) : String
   absolute_path.to_s.lchop(base.to_s).lchop('/')
 end
 
-# Spawn a system level Bob process for a project
+# Spawn Bob in a fiber for a project
 def spawn_bob(project : Project)
   puts "Starting Bob watching #{project[:path]}, building #{project[:image_name]}:latest"
   builder = Bob::Builder.new(**project)
@@ -61,7 +61,7 @@ def entrypoint
          elsif environment_repository
            environment_repository
          else
-           puts "docker-entrypoint [REPOSITORIES_PATH]"
+           puts "entrypoint [REPOSITORIES_PATH]"
            puts
            puts "Expected $BOB_REPO_PATH or a repository path"
            puts
