@@ -23,7 +23,9 @@ class Bob::Builder
   # Runs a build based on the current path contents.
   def build
     puts "#{self}: action=build path=#{path} name=#{name}"
-    docker.images.build path, t: name
+    docker.images.build path, t: name do |s|
+      puts "#{self}: action=images.build output=#{s}"
+    end
   end
 
   # Recreate a container, using the current image.
@@ -48,7 +50,7 @@ class Bob::Builder
     puts "Warning: Multiple networks #{networks}" if networks.size > 1
     primary_network = networks.first
 
-    # Port mappingss
+    # Port mappings
     ports = container.attrs.host_config.port_bindings
 
     # Environment
@@ -76,32 +78,43 @@ class Bob::Builder
       entrypoint: command,
     )
 
+    puts %(#{self}: action=recreate_container message="stopping old container")
     # Stop the existing container
     container.stop
 
+    puts %(#{self}: action=recreate_container message="starting new container")
     # Start the temporary container
     new_container.start
 
+    puts %(#{self}: action=recreate_container message="removing old container")
     # Remove the existing container
     container.remove(v: false, force: true)
 
+    puts %(#{self}: action=recreate_container message="renaming new container")
     # Rename the temporary container to the original container
     new_container.rename(container.name)
+
+    new_container.reload!
   end
 
   # Inspect existing containers for an image
   def existing_containers : Array(Docker::Container)
-    docker.containers.list filters: {:ancestor => name}
+    # names = docker.containers.list.select do |container|
+    #   container.attrs.config.image == name
+    # end
+    ancestors = docker.containers.list filters: {:ancestor => name}
+
+    ancestors
   end
 
   def relaunch_containers
-    existing_containers.each &->recreate_container(Docker::Container)
+    existing_containers.map &->recreate_container(Docker::Container)
   end
 
   # Start watching the path and automatically build an image and relaunch containers
   # when a new git commit is made, or when switching to a new branch.
   def watch : Nil
-    puts "#{self.inspect}: action=watch"
+    puts "#{self}: action=watch path=#{path} name=#{name}"
     @watcher ||= Inotify.watch "#{path}/.git/logs/HEAD" do |event|
       puts "#{self}: action=watch event=#{event}"
       next unless event.type == Inotify::Event::Type::MODIFY

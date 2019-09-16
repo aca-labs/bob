@@ -6,7 +6,7 @@ shards:
 
   docker:
     github: aca-labs/crystal-docker
-    commit: 39fa2ca574a2953becb2492bfc276d58d18dc320
+    commit: 77aa743f299e6dab439c77efb8aca59294c03aa3
 
   inotify:
     github: aca-labs/inotify.cr
