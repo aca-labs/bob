@@ -132,8 +132,8 @@ class Bob::Builder
       puts "#{self}: git repo change detected (#{details}), rebuilding"
 
       begin
-        build
-        relaunch_containers
+        # Only relaunch image's containers if build is successful
+        relaunch_containers if build
       rescue e : Docker::DockerException
         STDERR.puts "#{"error:".colorize.bright.red} #{e.message}"
       end

@@ -2,11 +2,11 @@ version: 1.0
 shards:
   crystar:
     github: naqvis/crystar
-    version: 0.1.1
+    version: 0.1.3
 
   docker:
     github: aca-labs/crystal-docker
-    commit: 77aa743f299e6dab439c77efb8aca59294c03aa3
+    commit: 07391ede581cf241192eb27a4af6189273395bfb
 
   inotify:
     github: aca-labs/inotify.cr

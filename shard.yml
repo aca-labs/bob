@@ -1,5 +1,5 @@
 name: bob
-version: 0.2.0
+version: 0.2.1
 
 authors:
   - Kim Burgess <kim@acaprojects.com>
@@ -20,6 +20,7 @@ dependencies:
     github: aca-labs/terminimal
   docker:
     github: aca-labs/crystal-docker
+    branch: master
   inotify:
     # github: petoem/inotify.cr
     github: aca-labs/inotify.cr
